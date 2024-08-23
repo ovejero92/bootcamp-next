@@ -2,11 +2,15 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Carreras from "./carrerasV/page";
+import Cursos from "./cursosV/page";
 
 const phrases = ["Impulsá tu carrera,", "Cambiá tu realidad,", "Aumentá tu salario,"];
 
 export default function Home() {
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
+  
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -15,18 +19,47 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const halfPageHeight = document.body.scrollHeight / 2;
+
+      if (scrollY > halfPageHeight) {
+        setShowScrollToTop(true);
+      } else {
+        setShowScrollToTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const handleScrollToCourses = () => {
+    document.getElementById('GoCarreras').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <>
       {/*shadow-indigo-500/50 */}
-      <div className="container mt-4 mx-auto w-11/12 h-full p-3 bg-indigo-950 rounded shadow-lg shadow-green-950">
-        <p className="text-center text-white">Accedé a nuestra charla</p>
-        <p className="text-center text-white">informativa y conocé todo sobre</p>
-        <p className="text-center text-white">ByteMasters</p>
-        <p className="text-center text-white">
+      <div className="container mx-auto mt-4 w-11/12 h-full p-3 bg-indigo-950 rounded shadow-lg shadow-green-950 lg:w-[43rem] lg:mt-[3rem]">
+        <div className="w-[15.6rem] mx-auto lg:w-full relative">
+        <p className="text-center text-white lg:text-start">Accedé a nuestra charla informativa y conocé todo sobre ByteMasters</p>
+        <p className="text-center text-white lg:absolute lg:right-2 lg:pl-2 lg:top-0 lg:border-l-4 lg:border-indigo-500">
           <Link href={'#'}>Ver ahora &#8594;</Link>
         </p>
+        </div>
       </div>
-      <div className="container mx-auto w-11/12 h-full mt-10">
+
+      <div className="lg:flex">        
+      <div className="lg:w-2/4 lg:h-full">
+   <div className="container mx-auto w-11/12 h-full mt-10 ">
         <div className="overflow-hidden h-12 relative">
         {phrases.map((phrase, index) => (
             <p
@@ -46,12 +79,21 @@ export default function Home() {
         </div>
       </div>
       <div className="mt-9">
-        <div className="text-center mb-3"><button className="text-white p-3 bg-green-950 rounded"><a href="#GoCarreras">Inscribirme ahora</a></button></div>
+        <div className="text-center mb-3"><button className="text-white p-3 bg-green-950 rounded" onClick={handleScrollToCourses}>Inscribirme ahora</button></div>
         <p className="text-center text-green-950"><Link href={'#'}>2 clases de prueba en tu primer curso</Link></p>
       </div>
-      <div className="mt-9">
+      </div>
+
+      <div className="lg:w-2/4">
+   
+      <div className="mt-9 ">
        <img src="https://www.coderhouse.com/imgs/home/home-hero-desktopV2.png" alt="Imagen que muestra una clase on-line" />
       </div>
+
+      </div>
+
+      </div>
+
        {/* region de publisidad alumnos */}
       <div className="mt-10">
       <div className="container mx-auto w-11/12 h-full ">
@@ -100,28 +142,9 @@ export default function Home() {
 </div>
          {/*region-regin cursos*/}
        <div className="container mx-auto w-11/12 h-full mt-3">
-        <h3 className="text-xl underline">Cursos</h3>
+        <h3 className="text-xl underline"><Link href={'/cursosV'}>CURSOS</Link></h3>
         {/*region-regin lista de cursos*/}
-        <ul className="flex mt-4">
-          <li className="p-2 rounded bg-indigo-950 text-white">Cripto</li>
-        </ul>
-        {/*region-regin cards de cursos*/}
-        <div className="ml-5 mt-3 w-72 h-[25rem] bg-indigo-950 rounded relative shadow-2xl flex flex-col justify-between">
-          <div>
-         <div className="bg-lime-200 text-center p-2 rounded-ss border-b-2">Aprobechá la masterBeca del 70%</div>
-         <div className="absolute -right-2 top-14 p-2 pr-2 text-white border-2 border-white bg-indigo-950 text-sm">2 clases de prueba</div>
-         <h4 className="mt-16 text-white text-2xl ml-3">Trading</h4>
-         <p className="mt-4 ml-3 text-white text-xs">⏱ 6 semanas / 2 clases semanales de 2h</p>
-         <div className="ml-6 mt-2 bg-indigo-700 w-32 flex justify-center border-2 border-black rounded-xl text-white">Online en vivo</div>
-          </div>
-        <div className="border-t-2 h-44 w-full">
-         <p className="text-white text-xs ml-3 mt-3">Standard plan <s>$ 389.900 ARS</s></p>
-         <p className="text-white text-xs ml-3 mt-1">MasterBeca $ 116.970 ARS</p>
-         <p className="text-white text-sm ml-3">Hasta 12 cuotas sin interés de</p>
-         <p className="text-white text-2xl ml-3">$ 21.029 ARS</p>
-         <div className="text-center m-2"><button className="p-2 border-2 border-lime-200 text-lime-200 w-4/5">Ver curso</button></div>
-        </div>
-        </div>
+        <Cursos />
        </div>
         {/*FIN region-regin carreras*/}
       </div>
@@ -143,6 +166,19 @@ export default function Home() {
        <p className="mt-3 mb-3">Inscribite a clases prácticas con mentorías personalizadas dictadas por quienes más saben, y preparate para dar el siguiente paso en tu carrera profesional.</p>
        <img src="https://www.coderhouse.com/imgs/home/tutor.png"/>
        <div><img src="https://www.coderhouse.com/imgs/home/chatRebrand.svg"/></div>
+      </div>
+
+      {showScrollToTop && (
+        <button 
+          onClick={handleScrollToTop} 
+          className="fixed bottom-5 right-5 p-2 bg-green-950 text-white text-[3rem] rounded-full shadow-lg shadow-green-950 hover:bg-lime-500 transition-transform duration-500 transform hover:rotate-180"
+        >
+        &#8659;
+        </button>
+      )}
+
+      <div>
+      <video preload="none" muted="" loop="" disablepictureinpicture="" playsinline="" autoplay=""><source src="https://coder-ui-static-content.coderhouse.com/ch-www-2021-statics/anims/mod2anim1-low.mp4" type="video/mp4" ></source><p>Su navegador no puede reproducir el video.</p></video>
       </div>
     </>
   );

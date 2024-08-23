@@ -1,43 +1,42 @@
 'use client'
-import { useParams, useRouter } from 'next/navigation'
-import React, { useState, useEffect } from 'react'
-import "../../globals.css";
+import {useParams, useRouter} from 'next/navigation';
+import React, {useState, useEffect} from 'react';
+import '../../globals.css';
 import AccordionItem from '@/app/components/AcordionItem';
 import Image from 'next/image';
 import Loading from '../../components/ui/loading';
 
-const Carreras = () => {
-    const { carreras } = useParams();
-    const [loading, setLoading] = useState(true);
+const Curso = () => {
+    const {curso} = useParams();
+    const [loading , setLoading] = useState(true);
     const [CR, setCR] = useState(null);
-    const ruta = useRouter();
+    const ruta = useRouter()
 
     useEffect(() => {
-        // Simular carga de datos
-        const fetchCarreras = async () => {
-            try {
-                const response = await fetch('http://localhost:4000/api/carreras')
+        const fetchCursos = async() => {
+            try{
+                const response = await fetch('http://localhost:4000/api/cursos')
                 const data = await response.json()
                 setTimeout(() => {
-                    const fetchedData = data.find(c => c.id == carreras);
+                    const fetchedData = data.find(c=> c.id == curso);
                     setCR(fetchedData);
                     setLoading(false);
-                }, 2000);
+                },2000)
             }
-            catch (err) {
+            catch(err){
                 setError("No se pudieron cargar los datos. Por favor, intente más tarde.");
-                setLoading(false);  // Asegura que isLoading se ponga en false si hay un error
+                setLoading(false); 
             }
         }
-        fetchCarreras()
-    }, [carreras]);
+        fetchCursos()
+    },[curso]);
 
     if (loading) {
         return (
-          <div className="flex justify-center items-center h-screen">
-          <Loading />
-          </div>
-        );
+            <div className="flex justify-center items-center h-screen">
+            <Loading />
+            </div>
+          );
     }
 
     if (!CR) {
@@ -64,7 +63,7 @@ const Carreras = () => {
           <section className="error">
             <div className="error__content">
               <div className="error__message message">
-                <h1 className="message__title">Carrera no encontrada</h1>
+                <h1 className="message__title">curso no encontrado</h1>
                 <p className="message__text">pusiste un id de una carrera ineccistente porfa vuelve al menu principal</p>
               </div>
               <div className="error__nav e-nav">
@@ -76,13 +75,11 @@ const Carreras = () => {
           </div>
         )
     }
-
     return (
         <>
-            <div className='img-fondo w-full h-[26rem] p-0'>
+         <div className='img-fondo w-full h-[26rem] p-0 fondo_imagen'>
                 <p className='text-center pt-6 text-white'>🔴 Online en vivo</p>
-                <p className='text-white pt-4 text-3xl text-center font-black'>Carrera de</p>
-                <p className='text-white pt-4 text-3xl text-center font-black'>{CR.nombre}</p>
+                <p className='text-white pt-4 text-3xl text-center font-black'>Carrera de {CR.nombre}</p>
                 <ul className='text-white list-disc ml-20 mt-4'>
                     <li>Correccíon de proyectos prácticos</li>
                     <li>Tutoría personalizada</li>
@@ -97,7 +94,7 @@ const Carreras = () => {
                 </div>
             </div>
             <div className='w-full h-full bg-gray-950'>
-                <h4 className='text-white ml-16 pt-4 text-3xl'>Sobre la carrera.</h4>
+                <h4 className='text-white ml-16 pt-4 text-3xl'>Sobre el curso.</h4>
                 <div className='w-[25rem] mx-auto mt-2 border-b border-b-indigo-500'>
                     <AccordionItem title={'Introducción'}>
                         <p className='text-white text-center'>En esta carrera comprenderás la importancia de la interpretación de los datos para establecer estrategias de negocio. Para eso, aprenderás los conceptos y fundamentos generales de procesamiento de datos. Lograrás análizar datos de manera más eficaz con Tableau y Excel.</p>
@@ -167,4 +164,4 @@ const Carreras = () => {
     )
 }
 
-export default Carreras
+export default Curso
