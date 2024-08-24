@@ -15,7 +15,9 @@ const Curso = () => {
     useEffect(() => {
         const fetchCursos = async() => {
             try{
-                const response = await fetch('http://localhost:4000/api/cursos')
+                const response = await fetch('http://localhost:4000/api/cursos', {
+                    cache:'no-store',
+                  })
                 const data = await response.json()
                 setTimeout(() => {
                     const fetchedData = data.find(c=> c.id == curso);

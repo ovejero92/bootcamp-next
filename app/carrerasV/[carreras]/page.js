@@ -16,7 +16,9 @@ const Carreras = () => {
         // Simular carga de datos
         const fetchCarreras = async () => {
             try {
-                const response = await fetch('http://localhost:4000/api/carreras')
+                const response = await fetch('http://localhost:4000/api/carreras', {
+                    cache:'no-store',
+                  })
                 const data = await response.json()
                 setTimeout(() => {
                     const fetchedData = data.find(c => c.id == carreras);

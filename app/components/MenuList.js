@@ -83,7 +83,7 @@ const MenuList = ({ open, handleClose, isLargeScreen }) => {
                             <>
                                 <AccordionItem title="Carreras">
                                     <ul className="relative">
-                                        <li className="absolute -top-[2.8rem] -left-[6rem] p-1 bg-gray-800 rounded-xl border-2 border-white text-white "><Link href={'/cursosV'}>Ver todos &#8594;</Link></li>
+                                        <li className="absolute -top-[2.8rem] -left-[6rem] p-1 bg-gray-800 rounded-xl border-2 border-white text-white "><Link href={'/carrerasV'}>Ver todas &#8594;</Link></li>
                                         {category.map(cat => (
                                             <>
                                             <AccordionItem title={cat} key={cat}>
@@ -113,7 +113,7 @@ const MenuList = ({ open, handleClose, isLargeScreen }) => {
                                 </AccordionItem>
                                 <AccordionItem title="Cursos">
                                 <ul className="relative">
-                                        <li className="absolute -top-[2.8rem] -left-[6rem] p-1 bg-gray-800 rounded-xl border-2 border-white text-white "><Link href={'/carrerasV'}>Ver todos &#8594;</Link></li>
+                                        <li className="absolute -top-[2.8rem] -left-[6rem] p-1 bg-gray-800 rounded-xl border-2 border-white text-white "><Link href={'/cursosV'}>Ver todos &#8594;</Link></li>
                                         {category2.map(cat => (
                                             <>
                                             <AccordionItem title={cat} key={cat}>

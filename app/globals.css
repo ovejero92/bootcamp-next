@@ -623,3 +623,17 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+/* styles.css o globals.css */
+@keyframes heartGrow {
+  0% {transform: scale(1); display: block;}
+  25%{transform: scale(.8);}
+  50% {transform: scale(.6);color: pink;}
+  75% {transform: scale(.4);color: white;}
+  90% {transform: scale(1);color: red;}
+  100% {display: none;}
+}
+
+.heart-animation {
+  animation: heartGrow 0.6s ease-in-out;
+}

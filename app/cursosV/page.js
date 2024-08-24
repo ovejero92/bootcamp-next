@@ -19,7 +19,9 @@ const Cursos = () => {
     const fetchCursos = async () => {
         try{
             setIsLoading(true);
-            const response = await fetch('http://localhost:4000/api/cursos');
+            const response = await fetch('http://localhost:4000/api/cursos', {
+              cache:'no-store',
+            });
             if(!response.ok){
                 throw new Error('Falló la obrencion de datos');
             }
@@ -113,7 +115,7 @@ const Cursos = () => {
          <p className="text-white text-xs ml-3 mt-1">MasterBeca {Math.round(course.price * 0.15).toLocaleString()} ARS</p>
          <p className="text-white text-sm ml-3">Hasta 12 cuotas sin interés de</p>
          <p className="text-white text-2xl ml-3">{(Math.round(course.price / 12)).toLocaleString()} ARS</p>
-         <div className="text-center m-2"><Link href={`/cursosV/${course.id}`}><button className="p-2 border-2 border-lime-200 text-lime-200 w-4/5">Ver curso</button></Link><button className="ml-2 p-2 border-2 border-lime-200 text-lime-200" onClick={() => handleAdd(course)}>+</button></div>
+         <div className="text-center m-2"><Link href={`/cursosV/${course.id}`}><button className="p-2 border-2 border-lime-200 text-lime-200 w-4/5">Ver curso</button></Link><button className="ml-2 p-2 border-2 border-lime-200 text-red-200 text-2xl" onClick={() => handleAdd(course)}>&#9825;</button></div>
         </div>
         </div>))
        ) : (
