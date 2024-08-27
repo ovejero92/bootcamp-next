@@ -114,7 +114,7 @@ const Carreras = () => {
                     <AccordionItem title={'Certificado'}>
                         <div className='w-full h-[22rem] bg-gradient-to-r from-neutral-500 to-violet-500"'>
                             <div className='w-full h-[4rem] flex justify-around items-center'>
-                                <div><Image src={'/Logo-next.png'} alt="logo" width={120} height={50} className="rounded-xl" /></div>
+                                <div><Image src={'/Logo-next.png'} fill='' alt="logo" width={120} height={50} className="rounded-xl" /></div>
                                 <div className='bg-white p-1 rounded-3xl'>certificado</div>
                             </div>
                             <div className='mx-auto h-[10.3rem] w-7/12'>

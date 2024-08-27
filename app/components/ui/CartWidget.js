@@ -23,6 +23,7 @@ const CartWidget = () => {
          <Image 
          src={"/cart-icon.svg"}
          alt="Cart icon"
+         fill=''
          width={45}
          height={45}
          />
@@ -32,30 +33,10 @@ const CartWidget = () => {
       >
         &#9825;
       </span>
-      <span className="ml-2">{totalQty()}</span>
+      {totalQty() > 0 && (<span className="ml-2">{totalQty()}</span>)}
+      
     </Link>
   );
 };
 
 export default CartWidget;
-// 'use client'
-// import Link from "next/link";
-// import { useCartContext } from "../context/CartContext";
-// import Image from "next/image"
-
-// const CartWidget = () => {
-//     const {totalQty} = useCartContext();
-
-//     return (
-//         <Link href={"/cart"} className={"text-base text-slate-100 p-3 flex items-center"}>
-//         <Image 
-//         src={"/cart-icon.svg"}
-//         alt="Cart icon"
-//         width={45}
-//         height={45}
-//         />
-//         <span>{totalQty()}</span>
-//         </Link>
-//     )
-// }
-// export default CartWidget

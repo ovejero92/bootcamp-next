@@ -4,7 +4,7 @@ import Link from "next/link";
 import SkeletonCategory from "../components/ui/skeletonCategory";
 import SkeletonCard from "../components/ui/skeletonCard";
 import { useCartContext } from "../components/context/CartContext";
-import "../globals.css"
+import "../globals.css";
 
 export const generateStaticsParams = () => {
   return [
@@ -23,7 +23,7 @@ const Carreras = () => {
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const {addToCart} = useCartContext();
+  const {addToCart, isInCart, removeToCart} = useCartContext();
 
   useEffect(() => {
     const fetchCarreras = async () => {
@@ -37,7 +37,6 @@ const Carreras = () => {
         }
         const data = await response.json();
 
-        // Simula un retraso de 2 segundos
         setTimeout(() => {
           setCarreras(data);
           setIsLoading(false);
@@ -45,7 +44,7 @@ const Carreras = () => {
 
       } catch (err) {
         setError("No se pudieron cargar los datos. Por favor, intente más tarde.");
-        setIsLoading(false);  // Asegura que isLoading se ponga en false si hay un error
+        setIsLoading(false);
       }
     };
 
@@ -56,7 +55,7 @@ const Carreras = () => {
     if (carreras.length > 0) {
       const uniqueCategories = [...new Set(carreras.map(c => c.tipo))];
       setCategory(uniqueCategories);
-      setSelectedCategory(uniqueCategories[0]);  // Establece la primera categoría como seleccionada
+      setSelectedCategory(uniqueCategories[0]);
     }
   }, [carreras]);
 
@@ -68,10 +67,17 @@ const Carreras = () => {
     setSelectedCategory(category);
   };
 
-  const handleAdd = (item) => {
-    addToCart({...item});
-  }
-
+  const handleToggleCart = (course) => {
+    if (isInCart(course.id)) {
+        removeToCart(course.id);
+    } else {
+        const updateData = {
+            ...course,
+            top: "carreras"
+        };
+        addToCart(updateData);
+    }
+};
   const ErrorCard = () => (
     <div className="ml-5 mt-3 w-72 h-[34rem] bg-red-100 rounded relative shadow-2xl flex flex-col justify-center items-center">
       <p className="text-red-500 text-center p-4">
@@ -86,7 +92,7 @@ const Carreras = () => {
   return (
     <>
       {isLoading ? (
-          <>
+        <>
           <ul className="flex mt-4 overflow-x-auto whitespace-nowrap scrollbar-hide lg:mt-5">
             {Array(5).fill(null).map((_, index) => (
               <SkeletonCategory key={index} />
@@ -102,9 +108,9 @@ const Carreras = () => {
       ) : (
         <>
           <ul className="flex mt-4  overflow-x-auto whitespace-nowrap scrollbar-hide lg:mt-5">
-            {category.map(cate => (
+            {category.map((cate,index) => (
               <li
-                key={cate}
+                key={`${cate}-${index}`}
                 className={`p-2 rounded ${selectedCategory === cate ? 'bg-blue-500' : 'bg-indigo-950'} text-white cursor-pointer ml-2`}
                 onClick={() => handleCategoryClick(cate)}
               >
@@ -112,9 +118,11 @@ const Carreras = () => {
               </li>
             ))}
           </ul>
-       
+
           <div className="flex overflow-x-auto whitespace-nowrap scroll-smooth snap-x snap-mandatory hide-scrollbar">
-            {error ? (<ErrorCard />) : filteredCourses.length > 0 ? (
+            {error ? (
+              <ErrorCard />
+            ) : filteredCourses.length > 0 ? (
               filteredCourses.map(course => (
                 <div className="ml-5 mt-3 w-72 h-[34rem] bg-indigo-950 rounded relative shadow-2xl flex flex-col justify-between" key={course.id}>
                   <div>
@@ -135,11 +143,20 @@ const Carreras = () => {
                     <p className="text-white text-xs ml-3 mt-1">MasterBeca + 15 % OFF $ {Math.round(course.price * 0.15).toLocaleString()} ARS</p>
                     <p className="text-white text-sm ml-3">Hasta 12 cuotas sin interés de</p>
                     <p className="text-white text-2xl ml-3">$ {(Math.round(course.price / 12)).toLocaleString()} ARS</p>
-                    <div className="text-center m-2"><Link href={`/carrerasV/${course.id}`}><button className="p-2 border-2 border-lime-200 text-lime-200 w-4/5">Ver curso</button></Link><button className="ml-2 p-2 border-2 border-lime-200 text-red-200 text-2xl" onClick={() => handleAdd(course)}>&#9825;</button></div>
+                    <div className="text-center m-2">
+                      <Link href={`/carrerasV/${course.id}`}>
+                        <button className="p-2 border-2 border-lime-200 text-lime-200 w-4/5">Ver curso</button>
+                      </Link>
+                      <button 
+                        className={`ml-2 p-2 border-2 text-2xl ${isInCart(course.id) ? 'border-red-200 text-red-500' : 'border-lime-200 text-red-200'}`} 
+                        onClick={() => handleToggleCart(course)}
+                      >
+                        {isInCart(course.id)? (<>♥️</>): (<>&#9825;</>)}
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))
-              
             ) : (
               <div className="ml-5 mt-3 w-72 h-[34rem] bg-yellow-100 rounded relative shadow-2xl flex flex-col justify-center items-center">
                 <p className="text-yellow-700 text-center p-4">
@@ -147,7 +164,7 @@ const Carreras = () => {
                 </p>
               </div>
             )}
-          </div>      
+          </div>
         </>
       )}
     </>
