@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 
 const CarreraTable = async () => {
-    const items = await fetch("http://localhost:4000/api/carreras",{
+    const items = await fetch(`http://${process.env.VERCEL_URL}/api/carreras`,{
         cache:'no-store',
     }).then(r => r.json())
   return (

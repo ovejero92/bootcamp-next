@@ -29,7 +29,7 @@ const Cursos = () => {
     const fetchCursos = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('http://localhost:4000/api/cursos', {
+        const response = await fetch(`http://${process.env.VERCEL_URL}/api/cursos`, {
           cache: 'no-store',
         });
         if (!response.ok) {

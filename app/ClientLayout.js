@@ -1,6 +1,5 @@
 "use client"; // Esto marca el componente como un Client Component
 import { usePathname } from 'next/navigation';
-import PlataformNavBar from './components/PlataforNavbar';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
