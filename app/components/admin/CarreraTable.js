@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 
 const CarreraTable = async () => {
-    const items = await fetch(`http://${process.env.VERCEL_URL}/api/carreras`,{
+    const items = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/carreras`,{
         cache:'no-store',
     }).then(r => r.json())
   return (
