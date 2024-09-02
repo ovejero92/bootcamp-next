@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { useCartContext } from "../components/context/CartContext";
 import '../globals.css'; // Asegúrate de que esta importación funcione correctamente
+import Link from "next/link";
+import Image from "next/image";
 
 const CartPage = () => {
     const { cart, removeToCart } = useCartContext();
@@ -44,10 +46,11 @@ const CartPage = () => {
                                 <p><strong>Categoría:</strong> {item.tipo}</p>
                             </div>
                             <div className="flex justify-center items-center w-1/3">
+                            <Link href={"/payment/"+item.id}>
                                 <button className="relative overflow-hidden rounded-xl bg-indigo-950 h-[4rem] w-[7rem]">
                                     <span className="text-white z-10 relative ">Inscribirme ahora</span>
                                     <div className="absolute inset-0 animate-shine"></div>
-                                </button>
+                                </button></Link>
                             </div>
                             <button className="absolute top-2 right-2" onClick={()=>removeToCart(item.id)}>❌</button>
                         </li>
@@ -55,7 +58,7 @@ const CartPage = () => {
                 ) : (
                     <div className="text-center text-gray-500">
                         <div className="flex justify-center mt-24">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScwIltRB98LyiTHaSlP3fO1tD5mDxQLmjR8w&s" alt="Imagen carrito vacio" width={200} height={100}/>
+                            <Image src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScwIltRB98LyiTHaSlP3fO1tD5mDxQLmjR8w&s" alt="Imagen carrito vacio" width={200} height={100}/>
                         </div>
                         <p>No hay elementos en esta categoría.</p>
                     </div>

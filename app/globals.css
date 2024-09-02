@@ -657,3 +657,12 @@ button .animate-shine {
   animation: shine 2s infinite linear;
   z-index: 0; /* Debe estar detrás del texto */
 }
+.profile-menu::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 12px;
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
+}

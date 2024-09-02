@@ -1,4 +1,5 @@
 'use client'
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Carreras from "./carrerasV/page";
@@ -86,7 +87,7 @@ export default function Home() {
         <div className="lg:w-2/4">
 
           <div className="mt-9">
-            <img src="https://www.coderhouse.com/imgs/home/home-hero-desktopV2.png"style={{ width: '100%', height: '100%' }} alt="Imagen que muestra una clase on-line" />
+            <Image src="https://www.coderhouse.com/imgs/home/home-hero-desktopV2.png" width={390} height={390} style={{ width: '100%', height: '100%' }} alt="Imagen que muestra una clase on-line" />
           </div>
 
         </div>
@@ -150,7 +151,7 @@ export default function Home() {
 
       {/* region de mas publisidad  */}
       <div className="container  w-[26rem] mx-auto h-full mt-16 flex justify-center aling-center">
-        <div><img src="https://www.coderhouse.com/imgs/testimonial-new.svg" alt="Imagenes de alumnos que trabajan en empresas importantes" style={{ width: '1750px', height: '100%' }} /></div>
+        <div><Image src="https://www.coderhouse.com/imgs/testimonial-new.svg" width={210} height={210} alt="Imagenes de alumnos que trabajan en empresas importantes" style={{ width: '1750px', height: '100%' }} /></div>
         <div className="">
           <p className="text-xl">Nuestros graduados forman parte de las mejores empresas de la reguion</p>
           <button className="mt-10 bg-lime-300 rounded p-1 ml-1">Ver opiniones</button>
@@ -163,8 +164,8 @@ export default function Home() {
         <p className="text-3xl">educación online a</p>
         <p className="text-3xl">tu alcance</p>
         <p className="mt-3 mb-3">Inscribite a clases prácticas con mentorías personalizadas dictadas por quienes más saben, y preparate para dar el siguiente paso en tu carrera profesional.</p>
-        <img src="https://www.coderhouse.com/imgs/home/tutor.png" />
-        <div><img src="https://www.coderhouse.com/imgs/home/chatRebrand.svg" /></div>
+        <Image src="https://www.coderhouse.com/imgs/home/tutor.png" alt="imagenes de tutores" width={80} height={80}/>
+        <div><Image src="https://www.coderhouse.com/imgs/home/chatRebrand.svg" width={310} height={310} alt="imagenes de chats con alumnos"/></div>
       </div>
 
       {showScrollToTop && (

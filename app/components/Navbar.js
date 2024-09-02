@@ -1,7 +1,7 @@
 'use client';
 import Link from "next/link";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import MenuList from "./MenuList";
 import styles from "../styles.module.scss";
 import CartWidget from "./ui/CartWidget";
@@ -27,7 +27,7 @@ const Navbar = () => {
         }
     };
 
-    const handleKeySequence = (e) => {
+    const handleKeySequence = useCallback((e) => {
         setInputSequence(prev => prev + e.key);
 
         // Detectar la secuencia 'c' 'o' combinada con 'ctrl'
@@ -35,7 +35,7 @@ const Navbar = () => {
             setShowLoginModal(true);
             setInputSequence('');
         }
-    };
+    }, [inputSequence]); // Agregar inputSequence como dependencia
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -52,7 +52,7 @@ const Navbar = () => {
                 mediaQuery.removeEventListener('change', handleResize);
             };
         }
-    }, [inputSequence]);
+    }, [handleKeySequence]); // Cambiar inputSequence por handleKeySequence
 
     return (
         <>

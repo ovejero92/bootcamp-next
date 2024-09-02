@@ -20,26 +20,26 @@ const CarreraTable = async () => {
                 </tr>
             </thead>
             <tbody>
-                {items.map((item) => (
-                    <tr>
-                        <td className='p-2'>{item.id}</td>
-                        <td className='p-2'>{item.nombre}</td>
-                        <td className='p-2'>{item.price}</td>
-                        <td className='p-2'>{item.cursos.length}</td>
-                        <td className='p-2'>{item.cant_semanas}</td>
-                        <td className='p-2'>{item.tipo}</td>
-                        <td className='p-2'>
-                         <Link href={`/admin/edit/`} className='rounded bg-green-400 text-white'>
-                         editar
-                         </Link>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
+    {items.map((item) => (
+        <tr key={item.id}>
+            <td className='p-2'>{item.id}</td>
+            <td className='p-2'>{item.nombre}</td>
+            <td className='p-2'>{item.price}</td>
+            <td className='p-2'>{item.cursos.length}</td>
+            <td className='p-2'>{item.cant_semanas}</td>
+            <td className='p-2'>{item.tipo}</td>
+            <td className='p-2'>
+                <Link href={`/admin/edit/${item.id}`} className='rounded bg-green-400 text-white'>
+                    Editar
+                </Link>
+            </td>
+        </tr>
+    ))}
+</tbody>
         </table>
 
     </div>
   )
 }
 
-export default CarreraTable
+export default CarreraTable;

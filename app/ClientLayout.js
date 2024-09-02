@@ -11,7 +11,7 @@ export default function ClientLayout({ children }) {
 
   return (
     <>
-      {isAuthPage ? null : (isPlataformaPage ? <PlataformNavBar /> : <Navbar />)}
+      {isAuthPage ? null : (isPlataformaPage ? null : <Navbar />)}
       <main className="flex-grow">
         {children}
       </main>

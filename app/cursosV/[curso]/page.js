@@ -91,7 +91,7 @@ const Curso = () => {
                     <li className='text-lime-200'>2 clases de prueba en tu primer curso</li>
                 </ul>
                 <div className='mt-6 ml-16 flex'>
-                    <img src='https://www.coderhouse.com/imgs/landings/persons-degree.png' alt='distintas imagenes de alumnos/as que pasaron por el programa' />
+                    <Image src='https://www.coderhouse.com/imgs/landings/persons-degree.png' alt='distintas imagenes de alumnos/as que pasaron por el programa' width={90} height={50}/>
                     <span className='text-white ml-3 mt-1'>Únete a más de 300.000 estudiantes</span>
                 </div>
             </div>

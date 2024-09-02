@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "./components/context/CartContext";
 import ClientLayout from "./ClientLayout";
+import { AuthProvider } from "./components/context/AuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,11 +21,13 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <div className="flex flex-col min-h-screen">
+          <AuthProvider>
           <CartProvider>
             <ClientLayout>
               {children}
             </ClientLayout>
           </CartProvider>
+          </AuthProvider>
         </div>
       </body>
     </html>
