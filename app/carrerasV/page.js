@@ -29,7 +29,7 @@ const Carreras = () => {
     const fetchCarreras = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`http://${process.env.NEXT_PUBLIC_API_URL}/api/carreras`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/carreras`, {
           cache:'no-store',
         });
         if (!response.ok) {
