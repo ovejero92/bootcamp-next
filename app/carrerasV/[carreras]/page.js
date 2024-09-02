@@ -16,7 +16,7 @@ const Carreras = () => {
         // Simular carga de datos
         const fetchCarreras = async () => {
             try {
-                const response = await fetch(`http://${process.env.VERCEL_URL}/api/carreras`, {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/carreras`, {
                     cache:'no-store',
                   })
                 const data = await response.json()

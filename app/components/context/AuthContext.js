@@ -12,11 +12,11 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState({
     logged: false,
     nombre: null,
-    apellido:null,
+    apellido: null,
     email: null,
     uid: null,
-    photoURL: null, // Incluye la URL de la imagen
-    cursos: []      // Agrega campo cursos
+    photoURL: null,
+    cursos: []
   });
 
   const db = getFirestore();  // Instancia de Firestore
@@ -26,25 +26,25 @@ export const AuthProvider = ({ children }) => {
       // Registrar el usuario
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
       const newUser = userCredential.user;
-      const userDats = doc(db, "usuarios", newUser.email)
-      const userSnapsDats = getDoc(userDats)
+      const userRef = doc(db, "usuarios", newUser.email);
 
-      if(!(await userSnapsDats).exists()){
-      // Crear el documento del usuario en Firestore con un campo cursos vacío
-      await setDoc(userDats, {
-        email: newUser.email,
-        nombre: values.nombre || null,  // Puedes usar el nombre del formulario si lo tienes
-        cursos: []  // Inicialmente, sin cursos
-      });
+      // Verificar si el documento ya existe
+      const userSnap = await getDoc(userRef);
+
+      if (!userSnap.exists()) {
+        // Crear el documento del usuario en Firestore con un campo cursos vacío
+        await setDoc(userRef, {
+          email: newUser.email,
+          nombre: values.nombre || null,
+          cursos: []  // Inicialmente, sin cursos
+        });
       } else {
-        const existingData = (await userSnapsDats).data();
-
-       await setDoc(userDats, {
-        ...existingData,
-       })
+        const existingData = userSnap.data();
+        // Actualizar el documento con datos existentes
+        await setDoc(userRef, {
+          ...existingData,
+        }, { merge: true });
       }
-
-     
 
       console.log("Usuario registrado y documento en Firestore creado.");
     } catch (error) {
@@ -66,19 +66,22 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await signOut(auth);
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error.message);
+    }
   };
 
   const googleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-  
+
       // Referencia al documento del usuario en Firestore
       const userRef = doc(db, "usuarios", user.email);
       const userSnapshot = await getDoc(userRef);
-  
-      // Si el usuario no tiene documento en Firestore, crea uno con cursos inicializados
+
       if (!userSnapshot.exists()) {
         await setDoc(userRef, {
           email: user.email,
@@ -86,7 +89,6 @@ export const AuthProvider = ({ children }) => {
           cursos: []  // Inicialmente, sin cursos
         });
       } else {
-        // Si el documento ya existe, obtenemos los datos existentes
         const existingData = userSnapshot.data();
         
         // Verificamos si tiene el campo "cursos", si no lo tiene lo agregamos
@@ -97,31 +99,28 @@ export const AuthProvider = ({ children }) => {
           }, { merge: true });
         }
       }
-  
-      // Actualiza el estado del usuario localmente
+
       setUser({
         logged: true,
         nombre: user.displayName,
         email: user.email,
         uid: user.uid,
         photoURL: user.photoURL,
-        cursos: userSnapshot.exists() ? userSnapshot.data().cursos : [],  // Si el documento existe, toma los cursos
+        cursos: userSnapshot.exists() ? userSnapshot.data().cursos : [],
       });
-  
+
       console.log("Inicio de sesión con Google exitoso:", result);
     } catch (error) {
       console.error("Error en Google Login:", error.message);
     }
   };
-  
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // Referencia al documento del usuario en Firestore
-        const userRef = doc(db, "usuarios", firebaseUser.uid);
+        const userRef = doc(db, "usuarios", firebaseUser.email);
         const userSnapshot = await getDoc(userRef);
-  
-        // Verifica si el usuario ya tiene un documento en Firestore
+
         if (userSnapshot.exists()) {
           const userData = userSnapshot.data();
           setUser({
@@ -130,17 +129,16 @@ export const AuthProvider = ({ children }) => {
             email: firebaseUser.email,
             uid: firebaseUser.uid,
             photoURL: firebaseUser.photoURL,
-            cursos: userData.cursos || []  // Inicializa cursos si existe
+            cursos: userData.cursos || []
           });
         } else {
-          // En caso de que no exista, inicializa con cursos vacíos
           setUser({
             logged: true,
             nombre: firebaseUser.displayName,
             email: firebaseUser.email,
             uid: firebaseUser.uid,
             photoURL: firebaseUser.photoURL,
-            cursos: []  // Inicializa cursos vacío
+            cursos: []
           });
         }
       } else {
@@ -150,11 +148,11 @@ export const AuthProvider = ({ children }) => {
           email: null,
           uid: null,
           photoURL: null,
-          cursos: []  // Reiniciar cursos al cerrar sesión
+          cursos: []
         });
       }
     });
-  
+
     return () => unsubscribe();
   }, [db]);
 
