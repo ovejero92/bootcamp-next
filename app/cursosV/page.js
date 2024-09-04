@@ -4,7 +4,9 @@ import Link from 'next/link';
 import SkeletonCategory from '../components/ui/skeletonCategory';
 import { useCartContext } from '../components/context/CartContext';
 import SkeletonCard from '../components/ui/skeletonCard';
-import "../globals.css"
+import { useDataContext } from '../components/context/DataContext';
+import "../globals.css";
+
 
 export const generateStaticsParams = () => {
   return [
@@ -17,37 +19,11 @@ export const generateStaticsParams = () => {
 }
 
 const Cursos = () => {
-  const [cursos, setCursos] = useState([]);
+  const { cursos, isLoading, error } = useDataContext(); // Usamos el contexto para obtener los cursos y el estado de carga
   const [category, setCategory] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [filteredCurses, setFilteredCurses] = useState([]);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const { addToCart, isInCart, removeToCart } = useCartContext();
-
-  useEffect(() => {
-    const fetchCursos = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cursos`, {
-          cache: 'no-store',
-        });
-        if (!response.ok) {
-          throw new Error('Falló la obrencion de datos');
-        }
-        const data = await response.json()
-        setTimeout(() => {
-          setCursos(data);
-          setIsLoading(false);
-        }, 2000)
-      }
-      catch (err) {
-        setError("No se pudieron cargar los datos. Por favor, intente más tarde.");
-        setIsLoading(false);
-      }
-    };
-    fetchCursos();
-  }, []);
 
   useEffect(() => {
     if (cursos.length > 0) {
@@ -64,18 +40,12 @@ const Cursos = () => {
   const handleCategoryClick = (category) => {
     setSelectedCategory(category)
   }
+  
   const handleToggleCart = (course) => {
-    console.log('Toggling cart for course:', course.id);
     if (isInCart(course.id)) {
-      console.log('Removing from cart');
       removeToCart(course.id);
     } else {
-      console.log('Adding to cart');
-      const updateData = {
-        ...course,
-        top: "cursos"
-      };
-      addToCart(updateData);
+      addToCart({ ...course, top: "cursos" });
     }
   };
 

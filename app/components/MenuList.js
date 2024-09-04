@@ -1,14 +1,16 @@
 'use client';
 import React, { useState, useEffect } from "react";
+import { useDataContext } from "./context/DataContext";
 import AccordionItem from "./AcordionItem";
 import Link from "next/link";
 
 const MenuList = ({ open, handleClose, isLargeScreen }) => {
     const [isLargeScreenState, setIsLargeScreenState] = useState(isLargeScreen);
+    const { carreras, cursos, isLoading, error } = useDataContext(); // Accede al contexto aquí
+
     const [category, setCategory] = useState([]);
     const [category2, setCategory2] = useState([]);
-    const [carreras, setCarreras] = useState([]);
-    const [cursos, setCursos] = useState([]);
+
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -22,43 +24,22 @@ const MenuList = ({ open, handleClose, isLargeScreen }) => {
         }
     }, []);
 
-    useEffect(() => {
-        const fetchCarreras = async () => {
-          try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/carreras`,{
-                cache:'no-store'
-            });
-            if (!response.ok) {
-              throw new Error("Falló la obtención de datos");
-            }
-            const data = await response.json();
-            const uniqueCategories = [...new Set(data.map(c=>c.tipo))];
-            setCategory(uniqueCategories);
-            setCarreras(data);
-           
-    
-          } catch (err) {
-            setError("No se pudieron cargar los datos. Por favor, intente más tarde.");
-          }
-        };
-        const fetchCursos = async() => {
-            try{
-                const response = await fetch('http://localhost:4000/api/cursos')
-                const data = await response.json()
-                const uniqueCategories = [...new Set(data.map(c=>c.tipo))];
-                setCategory2(uniqueCategories);
-                setCursos(data)
-            }
-            catch(err){
-                setError("No se pudieron cargar los datos. Por favor, intente más tarde.");
-            }
-        }
-        fetchCursos()
-        fetchCarreras();
-      }, []);
+  // Efecto para crear categorías únicas de carreras y cursos usando los datos del contexto
+  useEffect(() => {
+    if (carreras.length > 0) {
+        const uniqueCategories = [...new Set(carreras.map(c => c.tipo))];
+        setCategory(uniqueCategories);
+    }
+    if (cursos.length > 0) {
+        const uniqueCategories2 = [...new Set(cursos.map(c => c.tipo))];
+        setCategory2(uniqueCategories2);
+    }
+}, [carreras, cursos]);
       
 
-    if (!open) return null;
+if (isLoading) return <div>Cargando...</div>;
+if (error) return <div>{error}</div>;
+if (!open) return null;
 
     return (
         <div className={`${open ? 'opacity-100 visible' : 'opacity-0 invisible'} transition-all fixed inset-0 bg-black/50 flex z-50 justify-end`}>
@@ -85,7 +66,7 @@ const MenuList = ({ open, handleClose, isLargeScreen }) => {
                             <>
                                 <AccordionItem title="Carreras">
                                     <ul className="relative">
-                                        <li className="absolute -top-[2.8rem] -left-[6rem] p-1 bg-gray-800 rounded-xl border-2 border-white text-white "><Link href={'/carrerasV'}>Ver todas &#8594;</Link></li>
+                                        <li className="absolute -top-[2.8rem] -left-[6rem] p-1 bg-gray-800 rounded-xl border-2 border-white text-white "><Link href={'/carrerasV'}  onClick={handleClose}>Ver todas &#8594;</Link></li>
                                         {category.map(cat => (
                                             <>
                                             <AccordionItem title={cat} key={cat}>
@@ -94,7 +75,7 @@ const MenuList = ({ open, handleClose, isLargeScreen }) => {
                                                         .filter(car => car.tipo === cat)  // Filtramos las carreras por categoría
                                                         .map(car => (
                                                             <li className="text-center text-white p-2 border-b-2 border-indigo-500 hover:bg-gray-600" key={car.id}>
-                                                                <Link href={`/carrerasV/${car.id}`}>{car.nombre}</Link>
+                                                                <Link href={`/carrerasV/${car.id}`}  onClick={handleClose}>{car.nombre}</Link>
                                                             </li>
                                                         ))
                                                     }
@@ -115,7 +96,7 @@ const MenuList = ({ open, handleClose, isLargeScreen }) => {
                                 </AccordionItem>
                                 <AccordionItem title="Cursos">
                                 <ul className="relative">
-                                        <li className="absolute -top-[2.8rem] -left-[6rem] p-1 bg-gray-800 rounded-xl border-2 border-white text-white "><Link href={'/cursosV'}>Ver todos &#8594;</Link></li>
+                                        <li className="absolute -top-[2.8rem] -left-[6rem] p-1 bg-gray-800 rounded-xl border-2 border-white text-white "><Link href={'/cursosV'}  onClick={handleClose}>Ver todos &#8594;</Link></li>
                                         {category2.map(cat => (
                                             <>
                                             <AccordionItem title={cat} key={cat}>
@@ -124,7 +105,7 @@ const MenuList = ({ open, handleClose, isLargeScreen }) => {
                                                         .filter(car => car.tipo === cat)  // Filtramos las carreras por categoría
                                                         .map(car => (
                                                             <li className="text-center text-white p-2 border-b-2 border-indigo-500 hover:bg-gray-600" key={car.id}>
-                                                                <Link href={`/carrerasV/${car.id}`}>{car.nombre}</Link>
+                                                                <Link href={`/cursosV/${car.id}`}  onClick={handleClose}>{car.nombre}</Link>
                                                             </li>
                                                         ))
                                                     }

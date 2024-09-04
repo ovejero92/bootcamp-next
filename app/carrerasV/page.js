@@ -4,52 +4,25 @@ import Link from "next/link";
 import SkeletonCategory from "../components/ui/skeletonCategory";
 import SkeletonCard from "../components/ui/skeletonCard";
 import { useCartContext } from "../components/context/CartContext";
+import { useDataContext } from "../components/context/DataContext";
 import "../globals.css";
 
-export const generateStaticsParams = () => {
-  return [
-    {category:'diseño UX/UI'},
-    {category:'data'},
-    {category:'programacion y desarrollo'},
-    {category:'marketing digital'},
-    {category:'producto'}
-  ]
-}
+// export const generateStaticParams = () => {
+//   return [
+//     { category: 'diseño UX/UI' },
+//     { category: 'data' },
+//     { category: 'programacion y desarrollo' },
+//     { category: 'marketing digital' },
+//     { category: 'producto' }
+//   ];
+// };
 
 const Carreras = () => {
-  const [carreras, setCarreras] = useState([]);
+  const { carreras, carrerasLoading, carrerasError } = useDataContext();
   const [category, setCategory] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const {addToCart, isInCart, removeToCart} = useCartContext();
-
-  useEffect(() => {
-    const fetchCarreras = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/carreras`, {
-          cache:'no-store',
-        });
-        if (!response.ok) {
-          throw new Error("Falló la obtención de datos");
-        }
-        const data = await response.json();
-
-        setTimeout(() => {
-          setCarreras(data);
-          setIsLoading(false);
-        }, 2000);
-
-      } catch (err) {
-        setError("No se pudieron cargar los datos. Por favor, intente más tarde.");
-        setIsLoading(false);
-      }
-    };
-
-    fetchCarreras();
-  }, []);
+  const { addToCart, isInCart, removeToCart } = useCartContext();
 
   useEffect(() => {
     if (carreras.length > 0) {
@@ -69,29 +42,26 @@ const Carreras = () => {
 
   const handleToggleCart = (course) => {
     if (isInCart(course.id)) {
-        removeToCart(course.id);
+      removeToCart(course.id);
     } else {
-        const updateData = {
-            ...course,
-            top: "carreras"
-        };
-        addToCart(updateData);
+      const updateData = {
+        ...course,
+        top: "carreras"
+      };
+      addToCart(updateData);
     }
-};
+  };
+
   const ErrorCard = () => (
     <div className="ml-5 mt-3 w-72 h-[34rem] bg-red-100 rounded relative shadow-2xl flex flex-col justify-center items-center">
-      <p className="text-red-500 text-center p-4">
-        No se pudo conectar a la base de datos.
-      </p>
-      <p className="text-red-500 text-center p-4">
-        Por favor, intente más tarde.
-      </p>
+      <p className="text-red-500 text-center p-4">No se pudo conectar a la base de datos.</p>
+      <p className="text-red-500 text-center p-4">Por favor, intente más tarde.</p>
     </div>
   );
 
   return (
     <>
-      {isLoading ? (
+      {carrerasLoading ? (
         <>
           <ul className="flex mt-4 overflow-x-auto whitespace-nowrap scrollbar-hide lg:mt-5">
             {Array(5).fill(null).map((_, index) => (
@@ -107,8 +77,8 @@ const Carreras = () => {
         </>
       ) : (
         <>
-          <ul className="flex mt-4  overflow-x-auto whitespace-nowrap scrollbar-hide lg:mt-5">
-            {category.map((cate,index) => (
+          <ul className="flex mt-4 overflow-x-auto whitespace-nowrap scrollbar-hide lg:mt-5">
+            {category.map((cate, index) => (
               <li
                 key={`${cate}-${index}`}
                 className={`p-2 rounded ${selectedCategory === cate ? 'bg-blue-500' : 'bg-indigo-950'} text-white cursor-pointer ml-2`}
@@ -120,7 +90,7 @@ const Carreras = () => {
           </ul>
 
           <div className="flex overflow-x-auto whitespace-nowrap scroll-smooth snap-x snap-mandatory hide-scrollbar">
-            {error ? (
+            {carrerasError ? (
               <ErrorCard />
             ) : filteredCourses.length > 0 ? (
               filteredCourses.map(course => (
@@ -151,7 +121,7 @@ const Carreras = () => {
                         className={`ml-2 p-2 border-2 text-2xl ${isInCart(course.id) ? 'border-red-200 text-red-500' : 'border-lime-200 text-red-200'}`} 
                         onClick={() => handleToggleCart(course)}
                       >
-                        {isInCart(course.id)? (<>♥️</>): (<>&#9825;</>)}
+                        {isInCart(course.id) ? (<>♥️</>) : (<>&#9825;</>)}
                       </button>
                     </div>
                   </div>
@@ -159,16 +129,14 @@ const Carreras = () => {
               ))
             ) : (
               <div className="ml-5 mt-3 w-72 h-[34rem] bg-yellow-100 rounded relative shadow-2xl flex flex-col justify-center items-center">
-                <p className="text-yellow-700 text-center p-4">
-                  No hay cursos disponibles en esta categoría.
-                </p>
+                <p className="text-yellow-700 text-center p-4">No hay cursos disponibles en esta categoría.</p>
               </div>
             )}
           </div>
         </>
       )}
     </>
-  )
-}
+  );
+};
 
 export default Carreras;

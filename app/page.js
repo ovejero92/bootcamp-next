@@ -10,6 +10,7 @@ const phrases = ["Impulsá tu carrera,", "Cambiá tu realidad,", "Aumentá tu sa
 export default function Home() {
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
+  const [isDataLoaded, setIsDataLoaded] = useState(false); // Nuevo estado para controlar la carga
 
 
 
@@ -37,6 +38,16 @@ export default function Home() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+  useEffect(() => {
+    // Simulación de la carga de datos de carreras y cursos
+    const loadData = async () => {
+      // Simular una solicitud de API
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulación de retardo
+      setIsDataLoaded(true);
+    };
+
+    loadData();
+  }, []);
 
   const handleScrollToCourses = () => {
     document.getElementById('GoCarreras').scrollIntoView({ behavior: 'smooth' });
@@ -52,7 +63,7 @@ export default function Home() {
       <div className="container mx-auto mt-4 w-11/12 h-full p-3 bg-indigo-950 rounded shadow-lg shadow-green-950 lg:w-[43rem] lg:mt-[3rem]">
         <div className="w-[15.6rem] mx-auto lg:w-full relative">
           <p className="text-center text-white lg:text-start">Accedé a nuestra Plataforma donde encontraras todos los cursos y carreras.</p>
-          <p className="text-center p-2 bg-green-200 rounded mt-1 hover:bg-green-950 hover:text-white lg:absolute lg:right-2 lg:pl-2 lg:top-0 lg:border-l-4 lg:border-indigo-500">
+          <p className="text-center p-2 bg-green-200 rounded mt-1 hover:bg-green-950 hover:text-white lg:absolute lg:right-2 lg:pl-2 lg:top-0 lg:border-l-4 lg:border-indigo-500 ">
             <Link href={'/plataforma'}>PLATAFORMA APP&#8594;</Link>
           </p>
         </div>
@@ -131,23 +142,29 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/*region de carreras y cursos*/}
-      <div className="container mx-auto w-11/12 h-full mt-3">
-        <h2 className="mt-2 ml-4 text-2xl" id="GoCarreras">Elegí tu curso o carrera:</h2>
-        {/*region-regin carreras*/}
+      
+        {/*region de carreras y cursos*/}
         <div className="container mx-auto w-11/12 h-full mt-3">
-          <h3 className="text-xl underline"><Link href={'/carrerasV'}>CARRERAS</Link></h3>
-          <Carreras />
+          <h2 className="mt-2 ml-4 text-2xl" id="GoCarreras">Elegí tu curso o carrera:</h2>
 
+          {/* Cargar carreras y cursos solo cuando los datos estén listos */}
+          {isDataLoaded ? (
+            <>
+              <div className="container mx-auto w-11/12 h-full mt-3">
+                <h3 className="text-xl underline"><Link href={'/carrerasV'}>CARRERAS</Link></h3>
+                <Carreras />
+              </div>
+
+              <div className="container mx-auto w-11/12 h-full mt-3">
+                <h3 className="text-xl underline"><Link href={'/cursosV'}>CURSOS</Link></h3>
+                <Cursos />
+              </div>
+            </>
+          ) : (
+            <p className="text-center">Cargando carreras y cursos...</p>
+          )}
         </div>
-        {/*region-regin cursos*/}
-        <div className="container mx-auto w-11/12 h-full mt-3">
-          <h3 className="text-xl underline"><Link href={'/cursosV'}>CURSOS</Link></h3>
-          {/*region-regin lista de cursos*/}
-          <Cursos />
-        </div>
-        {/*FIN region-regin carreras*/}
-      </div>
+      
 
       {/* region de mas publisidad  */}
       <div className="container  w-[26rem] mx-auto h-full mt-16 flex justify-center aling-center">

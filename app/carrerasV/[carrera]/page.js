@@ -5,36 +5,21 @@ import "../../globals.css";
 import AccordionItem from '@/app/components/AcordionItem';
 import Image from 'next/image';
 import Loading from '../../components/ui/loading';
+import { useDataContext } from '@/app/components/context/DataContext';
 
 const Carreras = () => {
-    const { carreras } = useParams();
-    const [loading, setLoading] = useState(true);
-    const [CR, setCR] = useState(null);
+    const { carrera } = useParams();
     const ruta = useRouter();
+    const { carreras, isLoading } = useDataContext();
+    const [CR, setCR] = useState(null);
 
     useEffect(() => {
-        // Simular carga de datos
-        const fetchCarreras = async () => {
-            try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/carreras`, {
-                    cache:'no-store',
-                  })
-                const data = await response.json()
-                setTimeout(() => {
-                    const fetchedData = data.find(c => c.id == carreras);
-                    setCR(fetchedData);
-                    setLoading(false);
-                }, 2000);
-            }
-            catch (err) {
-                setError("No se pudieron cargar los datos. Por favor, intente más tarde.");
-                setLoading(false);  // Asegura que isLoading se ponga en false si hay un error
-            }
+        if (!isLoading && carreras.length > 0) {
+          const fetchedCarrera = carreras.find(c => c.id == carrera);
+          setCR(fetchedCarrera);
         }
-        fetchCarreras()
-    }, [carreras]);
-
-    if (loading) {
+      }, [isLoading, carreras, carrera]);
+    if (isLoading) {
         return (
           <div className="flex justify-center items-center h-screen">
           <Loading />

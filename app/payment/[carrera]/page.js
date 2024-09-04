@@ -3,13 +3,14 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Loading from '@/app/components/ui/loading';
+import { useDataContext } from '@/app/components/context/DataContext';
 
 const Payment = () => {
-    const { carreras } = useParams(); // Renombrado a 'id' para mayor claridad
+    const { carrera } = useParams(); // Renombrado a 'id' para mayor claridad
     const ruta = useRouter();
+    const { carreras, isLoading, error } = useDataContext();
     const [loading, setLoading] = useState(true);
     const [CR, setCR] = useState(null);
-    const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
         email: '',
         nombre: '',
@@ -22,6 +23,19 @@ const Payment = () => {
         FechaVencimiento: '',
         CodigoSeguridad: ''
     });
+
+    useEffect(() => {
+        if (isLoading) return; // Si aún se está cargando, no hacer nada
+
+        const fetchedData = carreras.find(c => String(c.id) === String(carrera));
+        if (fetchedData) {
+            setCR(fetchedData);
+        } else {
+            setError("Carrera no encontrada.");
+        }
+        setLoading(false);
+    }, [carrera, carreras, isLoading]);
+
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -80,35 +94,6 @@ const Payment = () => {
             alert('Hubo un error al procesar el pago.');
         }
     };
-
-    useEffect(() => {
-        const fetchCarreras = async () => {
-            try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/carreras`, {
-                    cache: 'no-store',
-                });
-
-                if (!response.ok) {
-                    throw new Error("Error en la solicitud al servidor.");
-                }
-
-                const data = await response.json();
-                // Aquí comparamos el ID único de Firebase
-                const fetchedData = data.find(c => String(c.id) === String(carreras));
-                if (fetchedData) {
-                    setCR(fetchedData);
-                } else {
-                    setError("Carrera no encontrada.");
-                }
-                setLoading(false);
-
-            } catch (err) {
-                setError("No se pudieron cargar los datos. Por favor, intente más tarde.");
-                setLoading(false);
-            }
-        };
-        fetchCarreras();
-    }, [carreras]);
 
     if (loading) {
         return (

@@ -1,5 +1,5 @@
 'use client'
-import {useEffect, useState} from "react";
+import { useState} from "react";
 import {db} from "@/firebase/config";
 import {doc, updateDoc} from "firebase/firestore";
 import { useRouter } from "next/navigation";

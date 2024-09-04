@@ -3,6 +3,8 @@ import "./globals.css";
 import { CartProvider } from "./components/context/CartContext";
 import ClientLayout from "./ClientLayout";
 import { AuthProvider } from "./components/context/AuthContext";
+import { DataProvider } from "./components/context/DataContext";
+import { AuthAdminProvider } from "./components/context/authAdminContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,13 +23,17 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <div className="flex flex-col min-h-screen">
+          <AuthAdminProvider>
           <AuthProvider>
+          <DataProvider>
           <CartProvider>
             <ClientLayout>
               {children}
             </ClientLayout>
           </CartProvider>
+          </DataProvider>
           </AuthProvider>
+          </AuthAdminProvider>
         </div>
       </body>
     </html>

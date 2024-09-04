@@ -5,41 +5,28 @@ import '../../globals.css';
 import AccordionItem from '@/app/components/AcordionItem';
 import Image from 'next/image';
 import Loading from '../../components/ui/loading';
+import { useDataContext } from '@/app/components/context/DataContext';
 
 const Curso = () => {
     const {curso} = useParams();
-    const [loading , setLoading] = useState(true);
+    const { cursos, isLoading} = useDataContext();
     const [CR, setCR] = useState(null);
     const ruta = useRouter()
 
     useEffect(() => {
-        const fetchCursos = async() => {
-            try{
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cursos`, {
-                    cache:'no-store',
-                  })
-                const data = await response.json()
-                setTimeout(() => {
-                    const fetchedData = data.find(c=> c.id == curso);
-                    setCR(fetchedData);
-                    setLoading(false);
-                },2000)
-            }
-            catch(err){
-                setError("No se pudieron cargar los datos. Por favor, intente más tarde.");
-                setLoading(false); 
-            }
+        if (cursos.length > 0) {
+          const fetchedData = cursos.find(c => c.id == curso);
+          setCR(fetchedData);
         }
-        fetchCursos()
-    },[curso]);
+      }, [cursos, curso]);
 
-    if (loading) {
+      if (isLoading) {
         return (
-            <div className="flex justify-center items-center h-screen">
+          <div className="flex justify-center items-center h-screen">
             <Loading />
-            </div>
-          );
-    }
+          </div>
+        );
+      }
 
     if (!CR) {
         return (

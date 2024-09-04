@@ -1,15 +1,24 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-    remotePatterns:[
+  images: {
+    remotePatterns: [
       {
         protocol: 'https',
         hostname: 'www.coderhouse.com',
         port: '',
-        pathname: '/imgs/**', // Permite cualquier imagen bajo el subdirectorio /imgs/
+        pathname: '/imgs/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'encrypted-tbn0.gstatic.com',
+        pathname: '/**',
       },
     ],
-    domains: ['lh3.googleusercontent.com','encrypted-tbn0.gstatic.com'],
   },
 };
 
