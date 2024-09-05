@@ -81,7 +81,7 @@ const Navbar = () => {
                             </div>
                             <div className="hidden lg:flex items-center space-x-4">
                                 <ul className="flex space-x-4">
-                                    <Link href={'/flataforma'}>
+                                    <Link href={'/plataforma'}>
                                         <li className="text-white p-4">Plataforma</li>
                                     </Link>
                                 </ul>

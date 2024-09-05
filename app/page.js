@@ -63,9 +63,11 @@ export default function Home() {
       <div className="container mx-auto mt-4 w-11/12 h-full p-3 bg-indigo-950 rounded shadow-lg shadow-green-950 lg:w-[43rem] lg:mt-[3rem]">
         <div className="w-[15.6rem] mx-auto lg:w-full relative">
           <p className="text-center text-white lg:text-start">Accedé a nuestra Plataforma donde encontraras todos los cursos y carreras.</p>
-          <p className="text-center p-2 bg-green-200 rounded mt-1 hover:bg-green-950 hover:text-white lg:absolute lg:right-2 lg:pl-2 lg:top-0 lg:border-l-4 lg:border-indigo-500 ">
-            <Link href={'/plataforma'}>PLATAFORMA APP&#8594;</Link>
-          </p>
+        <Link href={'/plataforma'}>
+        <p className="text-center p-2 bg-green-200 rounded mt-1 ">
+            PLATAFORMA APP&#8594;
+        </p>
+        </Link>
         </div>
       </div>
 
