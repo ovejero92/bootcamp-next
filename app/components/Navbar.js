@@ -22,7 +22,7 @@ const Navbar = () => {
     const handleClose = () => setMenuOpen(false);
 
     const handleLogin = () => {
-        if (userInput === 'coder' && passwordInput === '1234') {
+        if (userInput === 'gustavo' && passwordInput === '0000') {
             loginAdmin();
             setShowLoginModal(false);
         } else {

@@ -1,5 +1,5 @@
 'use client'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import React, { useState, useEffect } from 'react'
 import "../../globals.css";
 import AccordionItem from '@/app/components/AcordionItem';
@@ -9,7 +9,6 @@ import { useDataContext } from '@/app/components/context/DataContext';
 
 const Carreras = () => {
     const { carrera } = useParams();
-    const ruta = useRouter();
     const { carreras, isLoading } = useDataContext();
     const [CR, setCR] = useState(null);
 
