@@ -7,7 +7,6 @@ import { useAuthAdminContext } from '../components/context/authAdminContext';
 import styles from "../styles.module.scss";
 import CartWidget from "./ui/CartWidget";
 import LoginAdminPage from "../admin/@login/page";
-
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [isLargeScreen, setIsLargeScreen] = useState(false);
@@ -15,47 +14,38 @@ const Navbar = () => {
     const [userInput, setUserInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
     const [inputSequence, setInputSequence] = useState('');
-
     const { userAdmin, loginAdmin } = useAuthAdminContext();
-
     const handleOpen = () => setMenuOpen(true);
     const handleClose = () => setMenuOpen(false);
-
     const handleLogin = () => {
-        if (userInput === 'gustavo' && passwordInput === '0000') {
+        if (userInput === 'gustavo' && passwordInput === process.env.NEXT_PUBLIC_SECRET_ADMIN) {
             loginAdmin();
             setShowLoginModal(false);
         } else {
-            alert('Usuario o contraseña incorrectos.');
+            alert('Usuario o contraseña incorrectos. ');
+            console.log('El secreto es:', process.env.SECRET_ADMIN)
         }
     };
-
     const handleKeySequence = useCallback((e) => {
         setInputSequence(prev => prev + e.key);
-
         if (inputSequence.includes('c') && e.ctrlKey && e.key === 'i') {
             setShowLoginModal(true);
             setInputSequence('');
         }
     }, [inputSequence]);
-
     useEffect(() => {
         if (typeof window !== 'undefined') {
             window.addEventListener('keydown', handleKeySequence);
-
             const mediaQuery = window.matchMedia('(min-width: 1024px)');
             setIsLargeScreen(mediaQuery.matches);
-
             const handleResize = () => setIsLargeScreen(mediaQuery.matches);
             mediaQuery.addEventListener('change', handleResize);
-
             return () => {
                 window.removeEventListener('keydown', handleKeySequence);
                 mediaQuery.removeEventListener('change', handleResize);
             };
         }
     }, [handleKeySequence]);
-
     return (
         <>
             <div className="w-full bg-gray-600 fixed top-0 z-10">
@@ -63,11 +53,9 @@ const Navbar = () => {
                     <Link href={'/'}>
                         <Image src={'/Logo-next.png'} alt="logo" width={200} height={50} fill='' className="rounded-xl hover:animate-pulse" style={{ height: 'auto' }} />
                     </Link>
-
                     {userAdmin?.logged && (
                         <Link href={'/admin'} className="text-[3.2rem] hover:origin-center hover:rotate-45 hover:transition-transform">&#10049;</Link>
                     )}
-
                     {isLargeScreen && (
                         <>
                             <div className="hidden lg:flex space-x-4">
@@ -88,7 +76,6 @@ const Navbar = () => {
                             </div>
                         </>
                     )}
-
                     <CartWidget />
                     <div onClick={handleOpen}>
                         <span className={styles.hambur}>&#9776;</span>
@@ -96,9 +83,7 @@ const Navbar = () => {
                 </div>
                 <MenuList open={menuOpen} handleClose={handleClose} isLargeScreen={isLargeScreen} />
             </div>
-
             <div className="mb-[6rem]"></div>
-
             {showLoginModal && (
                 <LoginAdminPage
                     userInput={userInput}
@@ -112,5 +97,4 @@ const Navbar = () => {
         </>
     );
 };
-
 export default Navbar;

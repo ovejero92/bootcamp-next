@@ -16,18 +16,18 @@ export const AuthAdminProvider = ({ children }) => {
     const loginAdmin = () => {
         const userState = { logged: true };
         setUserAdmin(userState);
-        localStorage.setItem('adminUser', JSON.stringify(userState)); // Guardamos el estado en localStorage
+        localStorage.setItem('addU', JSON.stringify(userState)); // Guardamos el estado en localStorage
     };
 
     // Función para cerrar sesión
     const logoutAdmin = () => {
         setUserAdmin({ logged: false });
-        localStorage.removeItem('adminUser');
+        localStorage.removeItem('addU');
         ruta.push('/')
     };
 
     useEffect(() => {
-        const savedUserAdmin = localStorage.getItem('adminUser');
+        const savedUserAdmin = localStorage.getItem('addU');
         if (savedUserAdmin) {
             try {
                 const parsedUser = JSON.parse(savedUserAdmin);
@@ -35,7 +35,7 @@ export const AuthAdminProvider = ({ children }) => {
                     setUserAdmin(parsedUser); // Recuperamos el estado desde localStorage
                 }
             } catch (error) {
-                console.error('Error parsing adminUser from localStorage:', error);
+                console.error('Error parsing addU from localStorage:', error);
             }
         }
     }, []);

@@ -1,7 +1,5 @@
 'use client';
-import React from 'react';
-
-const LoginAdminPage = ({ userInput, setUserInput, passwordInput, setPasswordInput, handleLogin, setShowLoginModal }) => {
+import React from 'react';const LoginAdminPage = ({ userInput, setUserInput, passwordInput, setPasswordInput, handleLogin, setShowLoginModal }) => {
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 justify-center items-center">
             <div className="bg-white p-6 rounded shadow-md w-4/5 ">
@@ -25,6 +23,4 @@ const LoginAdminPage = ({ userInput, setUserInput, passwordInput, setPasswordInp
             </div>
         </div>
     );
-};
-
-export default LoginAdminPage;
+};export default LoginAdminPage;

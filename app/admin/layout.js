@@ -6,7 +6,7 @@ const AdminLayaut = ({ children, login }) => {
 
     useEffect(() => {
         // Verificamos si hay un usuario guardado en localStorage
-        const savedUserAdmin = localStorage.getItem('adminUser');
+        const savedUserAdmin = localStorage.getItem('addU');
         if (savedUserAdmin) {
             try {
                 const parsedUser = JSON.parse(savedUserAdmin);
@@ -16,7 +16,7 @@ const AdminLayaut = ({ children, login }) => {
                     setIsLoggedIn(false);
                 }
             } catch (error) {
-                console.error('Error parsing adminUser from localStorage:', error);
+                console.error('Error parsing addU from localStorage:', error);
                 setIsLoggedIn(false);
             }
         } else {
