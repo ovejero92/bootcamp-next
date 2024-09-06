@@ -1,14 +1,17 @@
 'use client';
 import { auth, provider } from "@/firebase/config";
+import { useRouter } from 'next/navigation';
 import { createContext, useContext, useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, signInWithPopup } from "firebase/auth";
-import { doc, setDoc, getFirestore, getDoc } from "firebase/firestore"; // Firestore imports
+import { doc, setDoc, getFirestore, getDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
 export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
+
+  const router = useRouter(); // Hook de enrutamiento
   const [user, setUser] = useState({
     logged: false,
     nombre: null,
@@ -26,7 +29,7 @@ export const AuthProvider = ({ children }) => {
       // Registrar el usuario
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
       const newUser = userCredential.user;
-      const userRef = doc(db, "usuarios", newUser.email);
+      const userRef = doc(db, "usuarios", newUser.uid); // Usar UID como identificador
 
       // Verificar si el documento ya existe
       const userSnap = await getDoc(userRef);
@@ -67,6 +70,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
+      window.location.reload(); // Recarga la página para actualizar el estado
       await signOut(auth);
     } catch (error) {
       console.error("Error al cerrar sesión:", error.message);
@@ -78,14 +82,15 @@ export const AuthProvider = ({ children }) => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      // Referencia al documento del usuario en Firestore
-      const userRef = doc(db, "usuarios", user.email);
+      // Referencia al documento del usuario en Firestore usando UID
+      const userRef = doc(db, "usuarios", user.uid); 
       const userSnapshot = await getDoc(userRef);
 
       if (!userSnapshot.exists()) {
         await setDoc(userRef, {
           email: user.email,
           nombre: user.displayName || null,
+          id:user.uid,
           cursos: []  // Inicialmente, sin cursos
         });
       } else {
@@ -118,7 +123,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        const userRef = doc(db, "usuarios", firebaseUser.email);
+        const userRef = doc(db, "usuarios", firebaseUser.uid); // Usar UID como identificador
         const userSnapshot = await getDoc(userRef);
 
         if (userSnapshot.exists()) {

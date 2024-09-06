@@ -1,16 +1,18 @@
 'use client';
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getDatabase, ref, set, onDisconnect } from "firebase/database";
 
 const AuthAdminContext = createContext();
 
 export const useAuthAdminContext = () => useContext(AuthAdminContext);
 
 export const AuthAdminProvider = ({ children }) => {
-    const ruta = useRouter()
-    const [userAdmin, setUserAdmin] = useState({
-        logged: false,
-    });
+    const ruta = useRouter();
+    const [userAdmin, setUserAdmin] = useState({ logged: false });
+    const auth = getAuth();
+    const rtdb = getDatabase();
 
     // Función para iniciar sesión
     const loginAdmin = () => {
@@ -23,7 +25,7 @@ export const AuthAdminProvider = ({ children }) => {
     const logoutAdmin = () => {
         setUserAdmin({ logged: false });
         localStorage.removeItem('addU');
-        ruta.push('/')
+        ruta.push('/');
     };
 
     useEffect(() => {
@@ -39,6 +41,21 @@ export const AuthAdminProvider = ({ children }) => {
             }
         }
     }, []);
+
+    // Firebase Presence: Detecta cuando el usuario está conectado/desconectado
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const userStatusDatabaseRef = ref(rtdb, 'status/' + user.uid);
+
+                set(userStatusDatabaseRef, { state: 'online', last_changed: new Date().toISOString() });
+
+                onDisconnect(userStatusDatabaseRef).set({ state: 'offline', last_changed: new Date().toISOString() });
+            }
+        });
+
+        return () => unsubscribe(); // Limpiar el listener al desmontar
+    }, [auth, rtdb]);
 
     return (
         <AuthAdminContext.Provider value={{ userAdmin, loginAdmin, logoutAdmin }}>
