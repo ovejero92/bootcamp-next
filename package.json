@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "app-coder-next": "file:",
     "bcryptjs": "^2.4.3",
     "firebase": "^10.13.0",
     "jsonwebtoken": "^9.0.2",
