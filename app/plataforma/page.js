@@ -66,7 +66,9 @@ const PataformaPage = () => {
               <div>
                 <button className="bg-lime-200 p-2 w-full rounded-md">Ir al Zoom</button>
               </div>
-              <p className="text-lime-200 p-2 text-center">Ir al Curso</p>
+              <a href="/plataforma/cursos" className="text-lime-200 p-2 text-center block hover:underline">
+                Ir al Curso
+              </a>
             </div>
           ))}
         </div>

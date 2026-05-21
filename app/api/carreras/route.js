@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 import { collection, getDocs} from "firebase/firestore";
-import {db } from "@/firebase/config"
+import { db } from "@/firebase/config";
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
-    // const {id} = params
-    const data = collection(db, "carreras")
+    if (!db) {
+        return NextResponse.json({ message: "Firebase no configurado" }, { status: 503 });
+    }
+    const data = collection(db, "carreras");
     
     // const q = id === data.id ? data : query(data,where('type', '==',id))
     

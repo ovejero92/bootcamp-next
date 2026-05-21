@@ -1,9 +1,9 @@
 'use client';
-import { auth, provider } from "@/firebase/config";
+import { auth, provider, db as dbFromConfig } from "@/firebase/config";
 import { useRouter } from 'next/navigation';
 import { createContext, useContext, useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, signInWithPopup } from "firebase/auth";
-import { doc, setDoc, getFirestore, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
     cursos: []
   });
 
-  const db = getFirestore();  // Instancia de Firestore
+  const db = dbFromConfig;
 
   const registerUser = async (values) => {
     try {

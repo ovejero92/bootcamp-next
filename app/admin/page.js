@@ -21,6 +21,9 @@ const Admin = () => {
         <Link href={'/admin/users'}>
           <button className='bg-green-200 p-2 rounded-2xl'>Gestionar Usuarios</button>
         </Link>
+        <Link href={'/admin/educacion'}>
+          <button className='bg-violet-300 p-2 rounded-2xl'>Educación (cursos)</button>
+        </Link>
       </div>
       <CarreraTable />
     </div>

@@ -2,8 +2,13 @@ import { NextResponse } from "next/server";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/firebase/config";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
-    const data = collection(db,'usuarios')
+    if (!db) {
+        return NextResponse.json({ message: "Firebase no configurado" }, { status: 503 });
+    }
+    const data = collection(db, 'usuarios');
 
     const querySnapshot = await getDocs(data)
 

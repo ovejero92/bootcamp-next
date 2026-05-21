@@ -24,6 +24,12 @@ const PlataforList = ({open, handleClose}) => {
           <span className="pl-3 pt-2">Chat</span>
           </li>
           </Link>
+          <Link href={'/plataforma/cursos'} className="p-2 hover:bg-gray-600">
+          <li className="flex pl-4">
+          <span className="pl-3 pt-2 text-2xl">📚</span>
+          <span className="pl-3 pt-2">Mis cursos</span>
+          </li>
+          </Link>
           <Link href={'/plataforma/yourway'} className="p-2 hover:bg-gray-600">
           <li className="flex pl-4">
           <Image alt="icono de " src={'/route-icon.svg'} width={40} height={40}/>

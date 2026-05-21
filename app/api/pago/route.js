@@ -1,9 +1,14 @@
-import { db } from '@/firebase/config'; 
+import { db } from '@/firebase/config';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { NextResponse } from 'next/server'; 
+import { NextResponse } from 'next/server';
+
+export const dynamic = 'force-dynamic';
 
 export async function POST(req) {
     try {
+        if (!db) {
+            return NextResponse.json({ message: 'Firebase no configurado' }, { status: 503 });
+        }
         const { email, curso, nombre, apellido, phone, documento } = await req.json();
 
         if (!email || !curso || !nombre || !apellido || !phone || !documento) {

@@ -1,0 +1,28 @@
+# Bootcamp Next — reglas globales para Cursor
+
+Sos un experto en Next.js 14 App Router, Firebase y Tailwind. Este repo es una plataforma de bootcamp educativo.
+
+## Estructura
+
+- Rutas de estudiante: `app/plataforma/`
+- Rutas de admin legacy: `app/admin/` (login localStorage)
+- Contenido educativo nuevo: `app/plataforma/cursos`, `app/admin/educacion`
+- Server Actions: `app/actions/`
+- Componentes por rol: `components/student`, `components/teacher`, `components/education`
+
+## Reglas obligatorias
+
+1. Respetá `.cursor/rules/product.md` y `tech.md`.
+2. Mutaciones de Firestore → Server Actions + Firebase Admin + `idToken`.
+3. No hardcodear credenciales; usar variables de entorno.
+4. Mantener JavaScript del proyecto; usar JSDoc en `lib/types/` si hace falta tipar.
+5. Mensajes de error y UI en español (Argentina).
+6. Cambios mínimos: no refactorizar código legacy salvo que sea necesario para la tarea.
+
+## Al agregar features educativas
+
+Seguir el flujo: Curso → Módulo → Lección (texto | video | proyecto) → Entrega → Feedback → Desbloqueo.
+
+## Puerto de desarrollo
+
+`npm run dev` usa el puerto **4000**.
